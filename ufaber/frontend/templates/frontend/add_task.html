@@ -1,0 +1,124 @@
+{% extends "frontend/base.html" %}
+
+    {% block title %} Add Task {% endblock %}
+    {% block body %}
+        <div id="form-wrapper">
+            <form id="form" enctype="multipart/form-data">
+                <div class="row mt-5">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-5">
+                        <label for="title">Task Title:</label>
+                        <input type="hidden" id="p_id" value="{{ p_id }}">
+                        <input type="text" name="title" id="title" class="form-control" required>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-5">
+                        <label for="discription">Description:</label>
+                        <textarea id="discription" name="discription" rows="5" class="form-control" required></textarea>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-5">
+                        <label for=">start_date">Start Date:</label>
+                        <input type="date" id="start_date" name="start_date" class="form-control" required>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-5">
+                        <label for="end_date">End Date:</label>
+                        <input type="date" id="end_date" name="end_date" class="form-control" required>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-2">
+                        <input type="submit" id="submit" value="Add Task" class="btn btn-dark btn-block">
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-2">
+                        <a type="button" class="btn btn-info btn-block" href="/">
+                            Go Back <i class="fas fa-reply"></i>
+                        </a>
+                    </div>
+                </div>                
+            </form>
+        </div>
+    
+
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');        
+        
+        $('.loading').toggle()
+        var form = document.getElementById('form-wrapper')
+        var p_id = document.getElementById('p_id').value
+        form.addEventListener('submit', function(e){
+            e.preventDefault()
+            var url = `http://127.0.0.1:8000/api/project/task/create/`
+            
+
+            var title = document.getElementById('title').value
+            if (title.length == 0){
+                alert("Must Provide Task Title!")
+                return false
+            }
+
+            var discription = document.getElementById('discription').value
+            if (discription.length == 0){
+                alert("Must Provide Task Description!")
+                return false
+            }
+            var startDate =  document.getElementById('start_date').value
+            if (startDate.length == 0){
+                alert("Must Provide Task Start Date!")
+                return false
+            }
+
+            var endDate =  document.getElementById('end_date').value
+            if (endDate.length == 0){
+                alert("Must Provide Task Start Date!")
+                return false
+            }
+            fetch(url, {
+                method:'POST',
+                headers:{
+                    'Content-type': 'application/json',
+                    'X-CSRFToken': csrftoken,
+                },
+                body:JSON.stringify({
+                    'project': p_id,
+                    'title': title,
+                    'discription': discription,
+                    'startdate': startDate,
+                    'enddate': endDate
+                })
+                
+            }).then(function(response){
+                console.log(response)
+                document.getElementById('form').reset()
+                window.location.replace(`/project/${p_id}/task/`)
+                $('.loading').toggle()
+            })
+        })
+    </script>
+    
+    {% endblock %}
+</html>

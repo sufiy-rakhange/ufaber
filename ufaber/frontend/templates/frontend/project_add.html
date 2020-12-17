@@ -1,0 +1,116 @@
+{% extends "frontend/base.html" %}
+
+    {% block title %} Add Project {% endblock %}
+    {% block body %}
+        <div id="form-wrapper">
+            <form id="form" enctype="multipart/form-data">
+                <div class="row mt-5">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-5">
+                        <label for="title">Project Title:</label>
+                        <input type="text" name="title" id="title" class="form-control" required>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-5">
+                        <label for="discription">Description:</label>
+                        <textarea id="discription" name="discription" rows="5" class="form-control" required></textarea>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-5">
+                        <label for="duration">Duration(in days):</label>
+                        <input type="number" id="duration" name="duration" class="form-control" required>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-2">
+                        <input type="submit" id="submit" value="Add Project" class="btn btn-dark btn-block">
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-2">
+                        <a type="button" class="btn btn-info btn-block" href="/">
+                            Go Back <i class="fas fa-reply"></i>
+                        </a>
+                    </div>
+                </div>                
+            </form>
+        </div>
+    
+
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+
+        $('.loading').toggle()
+        /* JQuery for displaying file name after choosing it */
+        $(".custom-file-input").on("change",function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+
+        
+        
+        var form = document.getElementById('form-wrapper')
+        
+        form.addEventListener('submit', function(e){
+            e.preventDefault()
+            var url = 'http://127.0.0.1:8000/api/project/create/'
+            
+
+            var title = document.getElementById('title').value
+            if (title.length == 0){
+                alert("Must Provide Project Title!")
+                return false
+            }
+
+            var discription = document.getElementById('discription').value
+            if (discription.length == 0){
+                alert("Must Provide Project Discription!")
+                return false
+            }
+
+            var duration = document.getElementById('duration').value
+            if (duration.length == 0){
+                alert("Must Provide Project Duration!")
+                return false
+            }
+            fetch(url, {
+                method:'POST',
+                headers:{
+                    'Content-type': 'application/json',
+                    'X-CSRFToken': csrftoken,
+                },
+                body:JSON.stringify({
+                    'title': title,
+                    'discription': discription,
+                    'duration': duration,
+                })
+                
+            }).then(function(response){
+                document.getElementById('form').reset()
+                $('.loading').toggle()
+                window.location.replace('/')
+            })
+        })
+    </script>
+    
+    {% endblock %}
+</html>

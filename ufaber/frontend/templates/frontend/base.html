@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+        <!-- Popper JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+        <!-- Including CSS Files -->
+        <link rel="stylesheet" href="/static/frontend/styles.css">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Font Awesome CDN -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css"
+        integrity="sha256-46qynGAkLSFpVbEBog43gvNhfrOj+BmwXdxFgVK/Kvc=" crossorigin="anonymous" />
+        
+    </head>
+    <body>
+        <!-- A horizontal navbar that becomes vertical on small screens -->
+        <nav class="navbar navbar-expand-sm bg-primary navbar-light fixed-top">
+            <a class="navbar-brand" href="/">
+                <h3>
+                    TEAMWORK <i class="fas fa-users"></i>
+                </h3>
+            </a>
+        </nav>
+        <div class="container p-5">
+            <!-- Loading Screen -->
+                <div class="loading">Loading&#8230;</div>
+            {% block body %}{% endblock %}
+        </div>
+    </body>
+</html>

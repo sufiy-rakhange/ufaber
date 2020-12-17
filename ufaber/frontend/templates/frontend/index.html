@@ -1,0 +1,152 @@
+{% extends "frontend/base.html" %}
+
+{% block title %} Project List {% endblock %}
+
+{% block body %}
+
+
+        <div class="row pt-5">
+            <a href="add/project" class="btn btn-outline-dark btn-block">
+                <i class="fas fa-plus"></i> Add a New Project
+            </a>
+        </div>
+            <form id="project_form">
+                <div class="row mt-5" id="info">
+                    <div class="col-sm-3"></div>
+                    <div class="col-lg-6">
+                        <div class="card error">
+                            <div class="card-body text-center">
+                                    No Projects to be Displayed!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-striped table-hovered mt-3">
+                    <thead class="thead-dark text-center">
+                        <tr>
+                            <th>
+                                Sr. No. <i class="fas fa-sort-numeric-down"></i>
+                                </th>
+                            <th>
+                                Title
+                            </th>
+                            <th>
+                                Discription <i class="fas fa-sticky-note"></i>
+                            </th>
+                            <th>
+                                Duration(in days) <i class="fas fa-calendar-week"></i>
+                            </th>
+                            
+                            <th>
+                                Edit <i class="fas fa-edit"></i>
+                            </th>
+                            <th>
+                                Delete <i class="fas fa-trash"></i>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center" id="tableBody">
+                    </tbody>
+                </table>
+            </form>
+
+        <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+
+            $(document).ready(function(){
+                $('#info').hide();
+                $('.table').hide();
+            })
+
+
+            buildList()
+            function buildList(){
+                var tableBody = document.getElementById('tableBody')
+
+                var url = 'http://127.0.0.1:8000/api/project/'
+                
+                fetch(url)
+                .then((resp) => resp.json())
+                .then(function(data){
+                    console.log('Data:', data)
+                    
+                    var list = data
+                    if (list.length == 0){
+                        $('#info').show()
+                        $('.loading').toggle()
+                    }
+                    else{
+                        $('.table').show()
+                        $('.loading').toggle()
+                    }
+                    count = 0
+                    for (var i in list){
+                        count += 1
+                        var item = `
+                        <tr>
+                            <td>${count}</td>
+                            <td>
+                                <a href="${'http://127.0.0.1:8000/project/'}${list[i].id}/task/">${list[i].title}</a>
+                            </td>
+                            <td>${list[i].discription}</td>
+                            <td>${list[i].duration}</td>
+                            <td>
+                                <a href="${'http://127.0.0.1:8000/project/update/'}${list[i].id}" class="btn btn-primary btn-block edit">
+                                    Edit <i class="far fa-edit"></i>
+                                </a>  
+                            </td>
+                            <td>
+                                <button class="btn btn-danger btn-block delete">
+                                    Delete <i class="fas fa-trash-restore"></i>
+                                </button>  
+                            </td>
+                        </tr>
+                        `
+                        tableBody.innerHTML += item
+
+                        
+                    }
+
+                    for (var i in list){
+                        var deleteBtn = document.getElementsByClassName('delete')[i]
+                        console.log(deleteBtn)
+                        deleteBtn.addEventListener('click', (function(item){
+                            return function(){
+                                deleteItem(item)
+                            }
+                        })(list[i]))
+                    }
+                })
+            }
+            
+            function deleteItem(item){
+                fetch(`http://127.0.0.1:8000/api/project/delete/${item.id}`, {
+                    method:'DELETE',
+                    headers:{
+                        'Content-type': 'application/json',
+                        'X-CSRFToken': csrftoken,
+                    }
+                }).then((response) => {
+                    $('.loading').toggle()
+                    buildList()
+                })
+            }
+            
+        </script>
+{% endblock %}
+</html>
