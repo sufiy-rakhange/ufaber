@@ -79,12 +79,8 @@ WSGI_APPLICATION = 'ufaber.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dadftebemv952e',
-        'USER': 'gyxkmepkcivfod',
-        'PASSWORD': '3dc80b5e399bcffa298c895f1944695861bf2d2c5b261e1ac8d334536ff7224a',
-        'HOST': 'ec2-3-231-46-238.compute-1.amazonaws.com',
-        'PORT': '5432'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
