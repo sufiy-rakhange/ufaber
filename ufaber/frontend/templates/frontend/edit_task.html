@@ -25,14 +25,14 @@
             <div class="col-md-3"></div>
             <div class="col-md-5">
                 <label for=">start_date">Start Date:</label>
-                <input type="date" id="start_date" name="start_date" class="form-control" required>
+                <input type="text" id="start_date" name="start_date" class="form-control" required>
             </div>
         </div>
         <div class="row mt-3">
             <div class="col-md-3"></div>
             <div class="col-md-5">
                 <label for="end_date">End Date:</label>
-                <input type="date" id="end_date" name="end_date" class="form-control" required>
+                <input type="text" id="end_date" name="end_date" class="form-control" required>
             </div>
         </div>
         <div class="row mt-3">
@@ -68,7 +68,29 @@
         }
         const csrftoken = getCookie('csrftoken');
 
-    
+    // Date Validation
+    $(function(){
+            $('#start_date').datepicker({
+                numberOfMonths:1,
+                dateFormat:'DD,d MM,yy',
+                onSelect:function(selectdate){
+                    var d = new Date(selectdate)
+                    d.setDate(d.getDate() + 1)
+                    $('#end_date').datepicker("option", "minDate", d)
+                }
+            })
+
+            $('#end_date').datepicker({
+                numberOfMonths:1,
+                dateFormat:'DD,d MM,yy',
+                onSelect:function(selectdate){
+                    var d = new Date(selectdate)
+                    d.setDate(d.getDate() - 1)
+                    $('#start_date').datepicker("option", "maxDate", d)
+                }
+            })
+        })
+        
     // Fetching data with id
     projectDetails()
     function projectDetails(){

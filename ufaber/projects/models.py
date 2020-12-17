@@ -15,8 +15,8 @@ class Task(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     title = models.CharField(max_length=100, blank=False, null=False)
     discription = models.TextField(blank=False, null=False)
-    startdate = models.DateField()
-    enddate = models.DateField()
+    startdate = models.CharField(max_length=100, blank=False, null=False)
+    enddate = models.CharField(max_length=100, blank=False, null=False)
 
     def __str__(self):
         return f"{self.title}"
