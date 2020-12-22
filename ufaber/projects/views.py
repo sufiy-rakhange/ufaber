@@ -12,16 +12,16 @@ from .serializers import ProjectSerializer, TaskSerializer
 def apiOverview(request):
     api_urls = {
         'Project List': '/project/',
-        'Project View': '/project/details/<id>',
+        'Project View': '/project/details/<project_id>',
         'Create Project': '/project/create/',
-        'Update Project': '/project/update/<id>',
-        'Delete Project': '/project/delete/<id>',
+        'Update Project': '/project/update/<project_id>',
+        'Delete Project': '/project/delete/<project_id>',
 
-        'Task List': '/project/<id>/task/',
-        'Task View': '/project/<id>/task/details/<id>',
+        'Task List': '/project/<project_id>/task/',
+        'Task View': '/project/<project_id>/task/details/<task_id>',
         'Create Task': '/project/task/create/',
-        'Update Task': '/project/<id>/task/update/<id>',
-        'Delete Task': '/project/<id>/task/delete/<id>',
+        'Update Task': '/project/<project_id>/task/update/<task_id>',
+        'Delete Task': '/project/<project_id>/task/delete/<task_id>',
     }
     return Response(api_urls)
 
